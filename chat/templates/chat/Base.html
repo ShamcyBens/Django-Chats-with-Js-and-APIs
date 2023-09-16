@@ -1,0 +1,126 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'css/base_style.css' %}">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<!--    <script type="text/javascript" src="{% static 'js/chat.js' %}"></script>-->
+    <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}">
+    {% block head %}{% endblock %}
+
+    <title>{% block title %}Chats{% endblock %}</title>
+</head>
+<body>
+    <div class="sidenav">
+        <div class="row">
+            <a href="/"><div class="col"><h2 style="padding-left: 16px; display: block-content;">BB Staff Chat</h2></div></a>
+            
+            <div class="col">
+                <div class="dropdown">
+                    <button onclick="myFunction()" class="btn btn-success">Menu</button>
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="/search">Search</a>
+                        <a href="/logout">Logout</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Display the user's profile picture and name here -->
+            <div class="col">
+                <div class="user-profile">
+                    <img src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'images/user_image.jpg' %}{% endif %}" style="width: 50px; height: 50px;" alt="User Profile Picture">
+                    <hr>
+                    <p style="font-size: 20px; font-type:bold; color: green;">Current User  - {{ user.username }}</p>
+                </div>
+            </div>
+        </div>
+        <hr class="mt-0 mb-4">
+        <div class="friends" style="y-overflow: auto">
+            <ul class="list-group">
+                {% for friend in friends %}
+                    <a href="/chat/{{friend.username}}">
+                        <li class="list-group-item list-group-item-action">
+                            <div class="row">
+                                <div class="col">
+                                    <img src="{% static 'images/user_image.jpg' %}" style="width: 50px; height: 50px;">
+                                    <span id="unread-counter" class="badge badge-pill badge-primary">0</span>
+
+                                </div>
+                                <div class="col">
+                                    <div class="row" style="font-color: #000"><p>{{friend.name}}</p></div>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+
+    <div class="main">
+        {% block content %}
+        <div style="margin-top: 40vh; text-align: center">
+            <h2>Select a chat & start messaging!</h2>
+        </div>
+        {% endblock %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+
+    <script>
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+                // Initialize the unread message counter to 0
+        var unreadMessages = 0;
+
+        // Function to update the unread message counter
+        function updateUnreadCounter() {
+            // Get the unread counter element by its id
+            var counterElement = document.getElementById('unread-counter');
+
+            // Update the counter text with the current count
+            counterElement.textContent = unreadMessages;
+
+            // Optionally, you can hide the counter when it's zero
+            if (unreadMessages === 0) {
+                counterElement.style.display = 'none';
+            } else {
+                counterElement.style.display = 'inline'; // Show the counter
+            }
+        }
+
+        // Function to increase the unread message count
+        function increaseUnreadCounter() {
+            unreadMessages++;
+            updateUnreadCounter();
+        }
+
+        // Function to reset the unread message count (e.g., when the user reads messages)
+        function resetUnreadCounter() {
+            unreadMessages = 0;
+            updateUnreadCounter();
+        }
+
+        // Example usage: Call increaseUnreadCounter() when a new message arrives
+        // and resetUnreadCounter() when the user reads the messages.
+
+
+    </script>
+
+</body>
+</html>
